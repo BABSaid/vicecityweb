@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Search, Users, Tv } from "lucide-react";
 import { Header } from "@/app/components/Header";
 import { Footer } from "@/app/components/Footer";
+import { useTwitchLiveStatus } from "@/app/hooks/useTwitchLiveStatus";
 
 // Types de données pour les streamers
 interface Streamer {
@@ -69,8 +70,34 @@ type SortOption = "viewers_desc" | "viewers_asc" | "pseudo_asc" | "pseudo_desc";
 export default function StreamersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("viewers_desc");
-  const [streamers] = useState<Streamer[]>(streamersData);
   const [activeCategory, setActiveCategory] = useState<"all" | "staff" | "partner">("all");
+
+  // Récupérer les noms d'utilisateur Twitch
+  const twitchUsernames = useMemo(() => 
+    streamersData
+      .filter(s => s.platform === "twitch")
+      .map(s => s.pseudo),
+    []
+  );
+
+  // Hook pour récupérer le statut live (mise à jour toutes les 60 secondes)
+  const { liveStatus, isLoading } = useTwitchLiveStatus(twitchUsernames, 60000);
+
+  // Fusionner les données statiques avec le statut live
+  const streamers = useMemo(() => 
+    streamersData.map(streamer => {
+      const status = liveStatus[streamer.pseudo.toLowerCase()];
+      if (status && streamer.platform === "twitch") {
+        return {
+          ...streamer,
+          isLive: status.isLive,
+          viewers: status.viewers
+        };
+      }
+      return streamer;
+    }),
+    [liveStatus]
+  );
 
   // Filtrer et trier les streamers
   const filteredStreamers = streamers
@@ -215,6 +242,23 @@ export default function StreamersPage() {
                 <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
                 <span className="text-gray-300 text-sm">HORS-LIGNE : </span>
                 <span className="text-gray-400 font-bold text-lg">{offlineCount}</span>
+              </div>
+            </div>
+            <div className="px-6 py-3 bg-black/40 border border-purple-500/50 rounded-lg">
+              <div className="flex items-center gap-2">
+                {isLoading ? (
+                  <>
+                    <div className="w-3 h-3 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                    <span className="text-gray-300 text-sm">Détection Twitch...</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/>
+                    </svg>
+                    <span className="text-purple-400 text-sm font-bold">API Twitch Active</span>
+                  </>
+                )}
               </div>
             </div>
           </div>

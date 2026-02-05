@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { HelpCircle } from "lucide-react";
-import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
 import { HelpModal } from "@/app/components/HelpModal";
+import logoImg from "figma:asset/ffb59d3818c3dbb8fbfc19ccb713d13a9a45c648.png";
 
 interface MenuItem {
   label: string;
@@ -30,8 +30,8 @@ export function Header({ showHelpButton = false }: HeaderProps) {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <ImageWithFallback 
-              src="https://i.imgur.com/j1P4W4G.png" 
+            <img 
+              src={logoImg} 
               alt="ViceCity Logo"
               className="w-12 h-12 object-contain"
             />
