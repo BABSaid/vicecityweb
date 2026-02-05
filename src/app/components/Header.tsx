@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { HelpCircle } from "lucide-react";
 import { HelpModal } from "@/app/components/HelpModal";
-import logoImg from "figma:asset/ffb59d3818c3dbb8fbfc19ccb713d13a9a45c648.png";
 
 interface MenuItem {
   label: string;
@@ -31,7 +30,7 @@ export function Header({ showHelpButton = false }: HeaderProps) {
           {/* Logo */}
           <div className="flex items-center gap-3">
             <img 
-              src={logoImg} 
+              src="https://i.imgur.com/j1P4W4G.png" 
               alt="ViceCity Logo"
               className="w-12 h-12 object-contain"
             />
