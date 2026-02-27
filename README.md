@@ -10,7 +10,6 @@ Site web officiel du serveur FiveM **ViceCity RP** avec une esthétique **Miami 
 
 ## 🎮 Rejoindre le Serveur
 
-- **IP Serveur :** `51.210.246.253:2000`
 - **Discord :** https://discord.gg/9wYw8GAQ7y
 
 ---
