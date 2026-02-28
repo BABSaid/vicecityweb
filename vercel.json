@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "routes": [
+    {
+      "src": "/api/twitch-status",
+      "dest": "/api/twitch-status.ts"
+    }
+  ],
+  "env": {
+    "TWITCH_CLIENT_ID": "@twitch_client_id",
+    "TWITCH_CLIENT_SECRET": "@twitch_client_secret"
+  }
+}
