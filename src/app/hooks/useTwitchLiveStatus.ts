@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 interface LiveStatus {
   [username: string]: {
@@ -15,13 +15,22 @@ interface TwitchStatusResponse {
   timestamp: string;
 }
 
+interface UseTwitchLiveStatusReturn {
+  liveStatus: LiveStatus;
+  isLoading: boolean;
+  error: string | null;
+  onlineCount: number;
+  offlineCount: number;
+  totalCount: number;
+}
+
 /**
  * Hook pour récupérer le statut live des streamers Twitch
  * Utilise maintenant un endpoint serverless Vercel pour la sécurité
  * @param usernames - Liste des noms d'utilisateurs Twitch à surveiller
  * @param refreshInterval - Intervalle de rafraîchissement en ms (défaut: 60000 = 1 minute)
  */
-export function useTwitchLiveStatus(usernames: string[], refreshInterval = 60000) {
+export function useTwitchLiveStatus(usernames: string[], refreshInterval = 60000): UseTwitchLiveStatusReturn {
   const [liveStatus, setLiveStatus] = useState<LiveStatus>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -53,15 +62,21 @@ export function useTwitchLiveStatus(usernames: string[], refreshInterval = 60000
           throw new Error('API returned unsuccessful response');
         }
 
+        // Normaliser tous les usernames en lowercase
+        const normalizedLiveStatus: LiveStatus = {};
+        Object.entries(data.liveStatus).forEach(([username, status]) => {
+          normalizedLiveStatus[username.toLowerCase()] = status;
+        });
+
         if (isMounted) {
-          setLiveStatus(data.liveStatus);
+          setLiveStatus(normalizedLiveStatus);
           setIsLoading(false);
         }
 
         console.log('✅ Twitch status updated successfully', {
           timestamp: data.timestamp,
-          streamersCount: Object.keys(data.liveStatus).length,
-          liveCount: Object.values(data.liveStatus).filter(s => s.isLive).length
+          streamersCount: Object.keys(normalizedLiveStatus).length,
+          liveCount: Object.values(normalizedLiveStatus).filter(s => s.isLive).length
         });
 
       } catch (err) {
@@ -76,7 +91,7 @@ export function useTwitchLiveStatus(usernames: string[], refreshInterval = 60000
     // Fetch initial
     fetchLiveStatus();
 
-    // Configurer le rafraîchissement automatique
+    // Configurer le rafraîchissement automatique toutes les 60 secondes
     const interval = setInterval(fetchLiveStatus, refreshInterval);
 
     return () => {
@@ -85,5 +100,25 @@ export function useTwitchLiveStatus(usernames: string[], refreshInterval = 60000
     };
   }, [usernames.join(','), refreshInterval]);
 
-  return { liveStatus, isLoading, error };
+  // Calculer les compteurs dynamiquement
+  const onlineCount = useMemo(() => {
+    return Object.values(liveStatus).filter(s => s.isLive).length;
+  }, [liveStatus]);
+
+  const offlineCount = useMemo(() => {
+    return Object.values(liveStatus).filter(s => !s.isLive).length;
+  }, [liveStatus]);
+
+  const totalCount = useMemo(() => {
+    return Object.keys(liveStatus).length;
+  }, [liveStatus]);
+
+  return { 
+    liveStatus, 
+    isLoading, 
+    error,
+    onlineCount,
+    offlineCount,
+    totalCount
+  };
 }

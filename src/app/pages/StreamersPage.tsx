@@ -81,11 +81,12 @@ export default function StreamersPage() {
   );
 
   // Hook pour récupérer le statut live (mise à jour toutes les 60 secondes)
-  const { liveStatus, isLoading } = useTwitchLiveStatus(twitchUsernames, 60000);
+  const { liveStatus, isLoading, onlineCount, offlineCount } = useTwitchLiveStatus(twitchUsernames, 60000);
 
   // Fusionner les données statiques avec le statut live
   const streamers = useMemo(() => 
     streamersData.map(streamer => {
+      // Normaliser le pseudo pour accéder à liveStatus
       const status = liveStatus[streamer.pseudo.toLowerCase()];
       if (status && streamer.platform === "twitch") {
         return {
@@ -125,8 +126,7 @@ export default function StreamersPage() {
   const liveStreamers = filteredStreamers.filter(s => s.isLive);
   const offlineStreamers = filteredStreamers.filter(s => !s.isLive);
 
-  const onlineCount = streamers.filter(s => s.isLive).length;
-  const offlineCount = streamers.filter(s => !s.isLive).length;
+  // Compteurs pour les catégories (staff/partner)
   const staffCount = streamers.filter(s => s.category === "staff").length;
   const partnerCount = streamers.filter(s => s.category === "partner").length;
 
