@@ -21,12 +21,12 @@ interface Streamer {
 const streamersData: Streamer[] = [
   {
     id: 1,
-    pseudo: "INCONNUEONTOP",
+    pseudo: "InconnuuOnTop",
     platform: "twitch",
     isLive: false,
     viewers: 0,
     imageUrl: "https://i.imgur.com/RgC31Zq.png",
-    profileUrl: "https://www.twitch.tv/inconnueontop",
+    profileUrl: "https://www.twitch.tv/inconnuuontop",
     badges: ["STAFF"],
     category: "staff"
   },

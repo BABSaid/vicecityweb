@@ -7,9 +7,11 @@ import IllegalPage from "@/app/pages/IllegalPage";
 import DiscordPage from "@/app/pages/DiscordPage";
 import ServeurPage from "@/app/pages/ServeurPage";
 import { EntreprisesPage } from "@/app/pages/EntreprisesPage";
+import { TwitchDebug } from "@/app/components/TwitchDebug";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState("home");
+  const [showDebug, setShowDebug] = useState(false);
 
   // Listen for hash changes to navigate between pages
   useEffect(() => {
@@ -29,8 +31,11 @@ export default function App() {
         setCurrentPage("serveur");
       } else if (hash === "entreprises") {
         setCurrentPage("entreprises");
+      } else if (hash === "debug") {
+        setShowDebug(true);
       } else {
         setCurrentPage("home");
+        setShowDebug(false);
       }
     };
 
@@ -43,6 +48,10 @@ export default function App() {
   }, []);
 
   // Render the appropriate page
+  if (showDebug) {
+    return <TwitchDebug />;
+  }
+
   if (currentPage === "streamers") {
     return <StreamersPage />;
   }
