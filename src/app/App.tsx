@@ -8,6 +8,7 @@ import DiscordPage from "@/app/pages/DiscordPage";
 import ServeurPage from "@/app/pages/ServeurPage";
 import { EntreprisesPage } from "@/app/pages/EntreprisesPage";
 import { TwitchDebug } from "@/app/components/TwitchDebug";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState("home");
@@ -48,37 +49,32 @@ export default function App() {
   }, []);
 
   // Render the appropriate page
+  let PageComponent;
+  
   if (showDebug) {
-    return <TwitchDebug />;
+    PageComponent = <TwitchDebug />;
+  } else if (currentPage === "streamers") {
+    PageComponent = <StreamersPage />;
+  } else if (currentPage === "reglement") {
+    PageComponent = <ReglementPage />;
+  } else if (currentPage === "legal") {
+    PageComponent = <LegalPage />;
+  } else if (currentPage === "illegal") {
+    PageComponent = <IllegalPage />;
+  } else if (currentPage === "discord") {
+    PageComponent = <DiscordPage />;
+  } else if (currentPage === "serveur") {
+    PageComponent = <ServeurPage />;
+  } else if (currentPage === "entreprises") {
+    PageComponent = <EntreprisesPage />;
+  } else {
+    PageComponent = <HomePage />;
   }
 
-  if (currentPage === "streamers") {
-    return <StreamersPage />;
-  }
-
-  if (currentPage === "reglement") {
-    return <ReglementPage />;
-  }
-
-  if (currentPage === "legal") {
-    return <LegalPage />;
-  }
-
-  if (currentPage === "illegal") {
-    return <IllegalPage />;
-  }
-
-  if (currentPage === "discord") {
-    return <DiscordPage />;
-  }
-
-  if (currentPage === "serveur") {
-    return <ServeurPage />;
-  }
-
-  if (currentPage === "entreprises") {
-    return <EntreprisesPage />;
-  }
-
-  return <HomePage />;
+  return (
+    <>
+      {PageComponent}
+      <Analytics />
+    </>
+  );
 }
