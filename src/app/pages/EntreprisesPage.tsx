@@ -18,7 +18,7 @@ interface Entreprise {
 const entreprises: Entreprise[] = [
   {
     id: 1,
-    name: "SASP ACADEMY",
+    name: "LSPD / Sheriff ACADEMY",
     image: "https://i.imgur.com/EaJGvvo.png",
     link: "https://discord.gg/7CX5h4WdSH",
     category: "Services Publics"
