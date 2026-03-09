@@ -74,7 +74,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
             {/* Tags Examples */}
             <div className="flex flex-wrap gap-3 mb-4">
               <span className="px-4 py-2 bg-purple-600 text-white font-bold rounded-md text-sm uppercase">
-                SASP
+                LSPD
               </span>
               <span className="px-4 py-2 bg-orange-600 text-white font-bold rounded-md text-sm uppercase">
                 Staff
