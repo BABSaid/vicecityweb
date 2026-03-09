@@ -98,7 +98,7 @@ export function SocialSection() {
 
 function ServerIPWithCopy() {
   const [copied, setCopied] = useState(false);
-  const serverIP = "51.210.246.253:2000";
+  const serverIP = "Soon";
 
   const copyIP = () => {
     // Méthode alternative compatible avec tous les navigateurs
