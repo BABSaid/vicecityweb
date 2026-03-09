@@ -14,7 +14,7 @@ export default function HomePage() {
         <div 
           className="absolute inset-0 opacity-40"
           style={{
-            backgroundImage: `url('https://i.imgur.com/vUTMHhU.png')`,
+            backgroundImage: `url('https://imgur.com/SpKOhwN.png')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
