@@ -4,7 +4,7 @@ import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
 
 export function JoinSection() {
   const [copiedIP, setCopiedIP] = useState(false);
-  const serverIP = "51.210.246.253:2000";
+  const serverIP = "Soon";
   const discordLink = "https://discord.gg/9wYw8GAQ7y";
 
   const copyIP = () => {
